@@ -1,24 +1,58 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
-  <button type="button" class="btn btn-success">Create Map +</button>
-  <h1> Your Maps</h1>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
+<div class="pageholder">
+    <div class="titleholder"> 
+        
+        <div class="title"> Google Maps API Data </div> 
+        
+    </div>
+
+
+    <div class="linkholder">
+        {% if mydata.count == 0 %}
+            <div> No data available </div>
+        {% else %}
+            <table id="ourtable3" class="myTable m-3">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Adress</th>
+                        <th>Zipcode</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Geocode link</th>
+                       
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for a in mydata %}
+                    <tr>
+                        <td> {{a.id}} </td>
+                        <td> {{a.name}} </td>
+                        <td> {{a.adress}} </td>
+                        <td> {{a.zipcode}} </td>
+                        <td> {{a.city}} </td>
+                        <td> {{a.country}} </td>
+                        <td> <a href="{% url 'my_geocoding_view' a.id %}"> Geocode!</a> </td>
+                       
+                    </tr>
+
+                    {% endfor%}
+                </tbody>
+
+                
+            </table>
+        {% endif %}
+     </div>
+
     
-      </tr>
-    </tbody>
-  </table>
+
+
+
+</div>
+
 
 {% endblock %}

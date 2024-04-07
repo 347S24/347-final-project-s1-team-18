@@ -17,6 +17,9 @@ if Path(ENV_FILE).exists():
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ENV_FILE))
 
+
+GOOGLE_API_KEY = 'AIzaSyA_S5faDYt2MX-2wVTuKAchwPsmgqyuArA'
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
