@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from .api import api
 
 urlpatterns = [
     path(
@@ -29,6 +30,7 @@ urlpatterns = [
         include("localsights.users.urls", namespace="users"),
     ),
     path("accounts/", include("allauth.urls")),
+    path("api/", api.urls),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
