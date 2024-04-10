@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+from localsights.maps import views
+
 urlpatterns = [
     path(
         "",
@@ -21,6 +23,10 @@ urlpatterns = [
         TemplateView.as_view(template_name="pages/maps.html"),
         name="maps",
     ),
+
+    path("maps/create/", views.createMap, name="create",
+    ),
+    
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

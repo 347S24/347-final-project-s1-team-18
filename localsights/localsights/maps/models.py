@@ -24,7 +24,7 @@ class Location(models.Model):
         """String for representing the Model object (in Admin site etc.)"""
         return self.name
     
-class Map:
+class Map(models.Model):
     name = models.CharField(
         max_length=200,
         unique=False,
