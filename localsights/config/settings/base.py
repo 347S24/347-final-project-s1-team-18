@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "localsights.users.apps.UsersConfig",
     # Your stuff: custom apps go here
+    "localsights.maps.apps.MapsConfig", # maps app
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

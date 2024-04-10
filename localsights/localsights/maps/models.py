@@ -18,6 +18,19 @@ class Locations(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Map(models.Model):
+    name = models.CharField(
+        max_length=200,
+        unique=False,
+        help_text="Enter a name for your location"
+    )
 
+    locations = models.ManyToManyField(
+        'Location',
+        related_name='locations'
+    )
+
+    zoom_level = models.FloatField()
     
 
