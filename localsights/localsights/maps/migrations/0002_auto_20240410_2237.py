@@ -58,11 +58,11 @@ class Migration(migrations.Migration):
             name='creator',
             field=models.CharField(default='SOME STRING', help_text='Enter your name', max_length=200),
         ),
-        migrations.AlterField(
-            model_name='location',
-            name='id',
-            field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
-        ),
+        # migrations.AlterField(
+        #     model_name='location',
+        #     name='id',
+        #     field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+        # ),
         migrations.AlterField(
             model_name='location',
             name='name',
