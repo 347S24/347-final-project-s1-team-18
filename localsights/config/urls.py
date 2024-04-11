@@ -34,7 +34,6 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     path("api/", api.urls),
-    path("api/", api.urls),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
