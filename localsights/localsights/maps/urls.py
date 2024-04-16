@@ -3,5 +3,7 @@ from .views import *
 
 
 urlpatterns = [
-    path("", HomeView.as_view(), name='my_home_view'),
+    path("home", HomeView.as_view(), name='home'),
+    path("maps", MapView.as_view(), name='maps'),
+    path("geocoding/<int:pk>", GeocodingView.as_view(), name='geocoding'),
 ]

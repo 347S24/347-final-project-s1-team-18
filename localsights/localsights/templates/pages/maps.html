@@ -1,36 +1,56 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<a href="{% url 'create' %}">
-  <button type="button" id="createMap" class="btn btn-success">Create Map +</button>
-</a>
 
-  <h1>Your Maps</h1>
+<div class="pageholder">
+    <div class="titleholder"> 
+        
+        <div class="title"> Google Maps API Data </div> 
+        
+    </div>
 
-  <table class="table">
-    
-      <tr>
-        <th scope="col">Maps</th>
-        <th scope="col">Map Name</th>
-        <th scope="col">Creator</th>
-        <th scope="col">Date</th>
-      </tr>
 
-    <tbody>
-      {% for map in maps %}
-      <tr>
-        <td>map.name</td>
-        <td>map.creator</td>
-        <td>map.date</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <div class="linkholder">
+        {% if mydata.count == 0 %}
+            <div> No data available </div>
+        {% else %}
+            <table id="ourtable3" class="myTable m-3">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Adress</th>
+                        <th>Zipcode</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Geocode link</th>
+                       
+                    </tr>
+                </thead>
 
-  
+                <tbody>
+                    {% for a in mydata %}
+                    <tr>
+                        <td> {{a.id}} </td>
+                        <td> {{a.name}} </td>
+                        <td> {{a.adress}} </td>
+                        <td> {{a.zipcode}} </td>
+                        <td> {{a.city}} </td>
+                        <td> {{a.country}} </td>
+                        <td> <a href="{% url 'geocoding' a.id %}"> Geocode!</a> </td>
+                       
+                    </tr>
 
-<<<<<<< HEAD
-  
+                    {% endfor%}
+                </tbody>
 
-=======
->>>>>>> origin/delete_migrations
+                
+            </table>
+        {% endif %}
+        
+     </div>
+
+</div>
+
+
 {% endblock %}

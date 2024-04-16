@@ -19,11 +19,22 @@ urlpatterns = [
         name="about",
     ),
     path(
-        "maps/", views.showMaps, name="maps",
+        "maps/",
+        views.MapView.as_view(template_name="pages/maps.html"),
+        name="maps"
      ),
 
-    path("maps/create/", views.createMap, name="create",
+    path(
+        "geocoding/<int:pk>/",
+        views.GeocodingView.as_view(template_name="pages/geocoding.html"),
+        name="geocoding"
     ),
+
+    #  path('', include('maps.urls')),
+
+
+    # path("maps/create/", views.createMap, name="create",
+    # ),
     
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
