@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Title: {{ map.title }}</h1>
+
+  <p><strong>Creator:</strong> {{ map.creator }}</p>
+  <p><strong>Locations:</strong> {{ map.locations.all|join:", " }}</p>
+  <p><strong>Zoom Level:</strong> {{ map.zoom_level }} </p>
+
+{% endblock %}

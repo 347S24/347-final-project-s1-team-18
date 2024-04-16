@@ -19,19 +19,20 @@ class Location(models.Model):
     def __str__(self):
         return self.name
     
+    def get_absoulate_url(self):
+        return reverse('map-detail', args=(str(self.id)))
+    
 class Map(models.Model):
     name = models.CharField(
         max_length=200,
         unique=False,
-        help_text="Enter a name for your Map",
-        default='SOME STRING'
+        default='Enter a name for your map'
     )
 
     creator = models.CharField(
         max_length=200,
         unique=False,
-        help_text="Enter your name",
-        default='SOME STRING'
+        default='Enter your name: '
     )
 
 
@@ -41,5 +42,10 @@ class Map(models.Model):
     )
 
     zoom_level = models.FloatField()
+
+    def __str__(self):
+        return self.name
     
+    def get_absoulate_url(self):
+        return reverse('map-detail', args=(str(self.id)))
 

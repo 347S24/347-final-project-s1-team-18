@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from .api import api
 from localsights.maps import views
+from localsights.maps.views import AddMapView
 
 urlpatterns = [
     path(
@@ -19,12 +20,18 @@ urlpatterns = [
         name="about",
     ),
     path(
+        "locations/", views.locationListView, name="locations",
+     ),
+     
+    path(
         "maps/", views.showMaps, name="maps",
      ),
 
-    path("maps/create/", views.createMap, name="create",
+    path('maps/<int:pk>', views.MapDetailView.as_view(), name='map-detail'),
+
+    path("maps/create/", AddMapView.as_view(), name="create",
     ),
-    
+
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
