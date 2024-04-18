@@ -31,9 +31,19 @@ urlpatterns = [
 
     path(
         "geocoding/<int:pk>/",
-        views.GeocodingView.as_view(template_name="pages/geocoding.html"),
+        views.GeocodingView.as_view(),
         name="geocoding"
     ),
+    path(
+        "distance/",
+        views.DistanceView.as_view(),
+        name="distance"
+     ),
+    path(
+        "display_map/",
+        views.DisplayMapView.as_view(),
+        name="display_map"
+     ),
 
     #  path('', include('maps.urls')),
 

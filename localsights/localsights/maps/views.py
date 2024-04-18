@@ -42,7 +42,7 @@ from django.urls import reverse
 #         for a in eligable_locations: 
 #             data = {
 #                 'lat': float(a.lat), 
-#                 'lng': float(a.lng), 
+#                   lng': float(a    lng), 
 #                 'name': a.name
 #             }
 
@@ -76,11 +76,11 @@ class GeocodingView(View):
     def get(self,request,pk): 
         location = Location.objects.get(pk=pk)
 
-        # if location.lng and location.lat and location.place_id != None: 
-        #     lat = location.lat
-        #     lng = location.lng
-        #     place_id = location.place_id
-        #     label = "from my database"
+        if location.lng and location.lat and location.place_id != None: 
+            lat = location.lat
+            lng = location.lng
+            place_id = location.place_id
+            label = "from my database"
 
         if location.address and location.country and location.zipcode and location.city != None: 
             address_string = str(location.address)+", "+str(location.zipcode)+", "+str(location.city)+", "+str(location.country)
@@ -91,64 +91,28 @@ class GeocodingView(View):
             lat = result.get('geometry', {}).get('location', {}).get('lat', None)
             lng = result.get('geometry', {}).get('location', {}).get('lng', None)
             place_id = result.get('place_id', {})
-            # label = "from my api call"
-            # location.lat = lat
-            # location.lng = lng
-            # location.place_id = place_id
-            # location.save()
+            label = "from my api call"
+            location.lat = lat
+            location.lng =  lng
+            location.place_id = place_id
+            location.save()
 
         else: 
             result = ""
-            # lat = ""
-            # lng = ""
-            # place_id = ""
-            # label = "no call made"
+            lat = ""
+            lng = ""
+            place_id = ""
+            label = "no call made"
 
 
         context = {
+            'result':result,
             'location':location,
-            # 'lat':lat, 
-            # 'lng':lng, 
-            # 'place_id':place_id, 
-            # 'label':label
+            'lat':lat, 
+            'lng':lng, 
+            'place_id':place_id, 
+            'label':label
         }
         
         return render(request, self.template_name, context)
     
-class LocationListView(ListView):
-    model = Location
-    template_name = "pages/locations.html"
-
-class LocationDetailView(DetailView):
-    model = Location
-    template_name = "locations/location_details.html"
-
-class LocationCreateView(CreateView):
-    model = Location
-    fields = ['name', 'zipcode', 'city', 'country', 'address']
-    template_name = "locations/location_form.html"
-
-
-def createLocationView(request):
-
-    if request.method == 'POST':
-        form = LocationForm(request.POST)
-
-      #  location.name = form['name']
-      #  location.zipcode = form['zipcode']
-      #  location.city = form['city']
-      #  location.country = form['country']
-      #  location.address = form['address']
-      #  location.save()
-        print("here before redirect")
-        return HttpResponseRedirect(reverse('location-detail'))
-    
-    else:
-        form = LocationForm()
-
-        context = {
-            'form': form,
-            
-        }
-
-        return render(request, 'locations/createLocation.html', context)
