@@ -13,7 +13,7 @@ class Location(models.Model):
     country = models.CharField(max_length=200, blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    edited_at = models.DateTimeField(auto_now=True)
+    edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     # lat = models.CharField(max_length=200, blank=True, null=True)
     # lng = models.CharField(max_length=200, blank=True, null=True)
@@ -21,6 +21,10 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        """Returns the URL to access a detail record for this book."""
+        return reverse('location-detail', args=[str(self.id)])
     
 class Map(models.Model):
     name = models.CharField(

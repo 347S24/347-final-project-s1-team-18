@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <a href="{% url 'location-create' %}">
+    <button type="button" id="createMap" class="btn btn-success">Create Location +</button>
+  </a>
+
+  <h1>Location List</h1>
+  {% if location_list %}
+    <ul>
+      {% for location in location_list %}
+      <li>
+        <a href="{{ location.get_absolute_url }}">{{ location.name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no locations yet.</p>
+  {% endif %}
+{% endblock %}

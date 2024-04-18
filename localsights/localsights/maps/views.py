@@ -1,14 +1,16 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.views import View
 from .models import *
 from django.views.generic import ListView
 from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 import googlemaps
 from django.conf import settings
-from .forms import *
+from .form import *
 from datetime import datetime
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # def showMaps(request):
 #     maps = Map.objects.all()
@@ -113,3 +115,40 @@ class GeocodingView(View):
         
         return render(request, self.template_name, context)
     
+class LocationListView(ListView):
+    model = Location
+    template_name = "pages/locations.html"
+
+class LocationDetailView(DetailView):
+    model = Location
+    template_name = "locations/location_details.html"
+
+class LocationCreateView(CreateView):
+    model = Location
+    fields = ['name', 'zipcode', 'city', 'country', 'address']
+    template_name = "locations/location_form.html"
+
+
+def createLocationView(request):
+
+    if request.method == 'POST':
+        form = LocationForm(request.POST)
+
+      #  location.name = form['name']
+      #  location.zipcode = form['zipcode']
+      #  location.city = form['city']
+      #  location.country = form['country']
+      #  location.address = form['address']
+      #  location.save()
+        print("here before redirect")
+        return HttpResponseRedirect(reverse('location-detail'))
+    
+    else:
+        form = LocationForm()
+
+        context = {
+            'form': form,
+            
+        }
+
+        return render(request, 'locations/createLocation.html', context)
