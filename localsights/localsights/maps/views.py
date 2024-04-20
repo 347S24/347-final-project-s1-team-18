@@ -7,24 +7,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 import googlemaps
 from django.conf import settings
-from .form import *
+from .forms import *
 from datetime import datetime
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-
-# def showMaps(request):
-#     maps = Map.objects.all()
-#     context = {
-#         "maps": maps
-#     }
-#     return render(request, "pages/maps.html", context)
-
-# def createMap(request):
-#     form = createMapForm()
-#     context = {
-#         'form': form
-#     }
-#     return render(request, "createMap.html", context)
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # class MapView(View): 
 #     template_name = "pages/maps.html"
@@ -199,22 +186,25 @@ class LocationDetailView(DetailView):
     model = Location
     template_name = "locations/location_detail.html"
 
-class LocationCreateView(CreateView):
+class LocationCreateView(PermissionRequiredMixin, CreateView):
     model = Location
     fields = ['name', 'zipcode', 'city', 'country', 'address']
     template_name = "locations/location_form.html"
+    permission_required = 'location.add_location'
 
-class LocationUpdateView(UpdateView):
+class LocationUpdateView(PermissionRequiredMixin, UpdateView):
     model = Location
     # Not recommended (potential security issue if more fields added)
     fields = ['name', 'zipcode', 'city', 'country', 'address']
     template_name = "locations/location_form.html"
+    permission_required = 'location.change_location'
 
 
-class LocationDeleteView(DeleteView):
+class LocationDeleteView(PermissionRequiredMixin, DeleteView):
     model = Location
     success_url = reverse_lazy('locations')
     template_name = "locations/location_confirm_delete.html"
+    permission_required = 'location.delete_location'
 
     def form_valid(self, form):
         try:
