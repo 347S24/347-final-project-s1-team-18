@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <a href="{% url 'location-create' %}">
+    <button type="button" id="createMap" class="btn btn-success">Create Location +</button>
+  </a>
+  <br></br>
+  <h1>Location List</h1>
+  {% if location_list %}
+    <table class="table">
+
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Zipcode</th>
+        <th scope="col">City</th>
+        <th scope="col">Country</th>
+        <th scope="col">Address</th>
+        <th scope="col">Operation</th>
+      </tr>
+
+      <tbody>
+        {% for location in location_list %}
+        <tr>
+          <th scope="row"><a href="{{ location.get_absolute_url }}">{{ location.name }}</a></th>
+          <th>{{ location.zipcode }}</th>
+          <th>{{ location.city }}</th>
+          <th>{{ location.country }}</th>
+          <th>{{ location.address }}</th>
+          <th>
+            <a href="{% url 'location-update' location.id %}">
+              <button type="button" class="btn btn-primary">Update</button>
+            </a>
+            <a href="{% url 'location-delete' location.id %}">
+              <button type="button" class="btn btn-danger">Delete</button>
+            </a>
+          </th>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>There are no locations yet.</p>
+  {% endif %}
+
+{% endblock %}

@@ -22,6 +22,10 @@ class Location(models.Model):
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        """Returns the URL to access a detail record for this book."""
+        return reverse('location-detail', args=[str(self.id)])
+    
 class Map(models.Model):
     name = models.CharField(
         max_length=200,

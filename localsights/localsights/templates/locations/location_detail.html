@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Location: {{ location.name }}</h1>
+
+  <p><strong>Zipcode:</strong> <a href="">{{ location.zipcode }}</a></p>
+  <!-- author detail link not yet defined -->
+  <p><strong>City:</strong> {{ location.city }}</p>
+  <p><strong>Country:</strong> {{ location.country }}</p>
+  <p><strong>Address:</strong> {{ location.address }}</p>
+
+{% endblock %}

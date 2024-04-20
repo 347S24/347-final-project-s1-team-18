@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import View
 from .models import *
 from django.views.generic import ListView
@@ -9,6 +9,8 @@ import googlemaps
 from django.conf import settings
 from .forms import *
 from datetime import datetime
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 
 # def showMaps(request):
 #     maps = Map.objects.all()
@@ -188,7 +190,39 @@ class DisplayMapView(View):
         }
 
         return render(request, self.template_name, context)
+    
+class LocationListView(ListView):
+    model = Location
+    template_name = "pages/locations.html"
+
+class LocationDetailView(DetailView):
+    model = Location
+    template_name = "locations/location_detail.html"
+
+class LocationCreateView(CreateView):
+    model = Location
+    fields = ['name', 'zipcode', 'city', 'country', 'address']
+    template_name = "locations/location_form.html"
+
+class LocationUpdateView(UpdateView):
+    model = Location
+    # Not recommended (potential security issue if more fields added)
+    fields = ['name', 'zipcode', 'city', 'country', 'address']
+    template_name = "locations/location_form.html"
 
 
+class LocationDeleteView(DeleteView):
+    model = Location
+    success_url = reverse_lazy('locations')
+    template_name = "locations/location_confirm_delete.html"
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("location-delete", kwargs={"pk": self.object.pk})
+            )
     
     

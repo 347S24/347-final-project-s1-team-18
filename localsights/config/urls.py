@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from .api import api
 from localsights.maps import views
+from localsights.maps.views import LocationDetailView, LocationListView, LocationUpdateView, LocationDeleteView
 
 urlpatterns = [
     path(
@@ -23,6 +24,13 @@ urlpatterns = [
         views.MapView.as_view(template_name="pages/maps.html"),
         name="maps"
      ),
+
+
+    path("locations/", LocationListView.as_view(), name="locations"),
+    path("locations/<int:pk>/", LocationDetailView.as_view(), name="location-detail"),
+    path('locations/create/', views.LocationCreateView.as_view(), name='location-create'),
+    path('location/<int:pk>/update/', views.LocationUpdateView.as_view(), name='location-update'),
+    path('location/<int:pk>/delete/', views.LocationDeleteView.as_view(), name='location-delete'),
 
     path(
         "geocoding/<int:pk>/",
