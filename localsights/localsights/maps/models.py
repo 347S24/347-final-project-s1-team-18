@@ -30,15 +30,15 @@ class Map(models.Model):
     name = models.CharField(
         max_length=200,
         unique=False,
-        help_text="Enter a name for your Map",
-        default='SOME STRING'
+        help_text="",
+        default=''
     )
 
     creator = models.CharField(
         max_length=200,
         unique=False,
-        help_text="Enter your name",
-        default='SOME STRING'
+        help_text="",
+        default=''
     )
 
 
@@ -47,7 +47,16 @@ class Map(models.Model):
         related_name='locations'
     )
 
+    date = models.DateField()
+
     zoom_level = models.FloatField()
+
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        """Returns the URL to access a detail record for this book."""
+        return reverse('map-detail', args=[str(self.id)])
     
 class Distances (models.Model):
     from_location = models.ForeignKey(Location, related_name = 'from_location', on_delete=models.CASCADE)

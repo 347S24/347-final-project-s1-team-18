@@ -4,9 +4,10 @@
   <a href="{% url 'location-create' %}">
     <button type="button" id="createMap" class="btn btn-success">Create Location +</button>
   </a>
+
   <br></br>
   <h1>Location List</h1>
-  {% if location_list %}
+  
     <table class="table">
 
       <tr>
@@ -18,6 +19,7 @@
         <th scope="col">Operation</th>
       </tr>
 
+      {% if location_list %}
       <tbody>
         {% for location in location_list %}
         <tr>
@@ -30,6 +32,7 @@
             <a href="{% url 'location-update' location.id %}">
               <button type="button" class="btn btn-primary">Update</button>
             </a>
+
             <a href="{% url 'location-delete' location.id %}">
               <button type="button" class="btn btn-danger">Delete</button>
             </a>
@@ -39,6 +42,7 @@
       </tbody>
     </table>
   {% else %}
+    </table>
     <p>There are no locations yet.</p>
   {% endif %}
 

@@ -1,8 +1,5 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import View
-from .models import *
-from django.views.generic import ListView
-from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 import googlemaps
@@ -186,33 +183,68 @@ class LocationDetailView(DetailView):
     model = Location
     template_name = "locations/location_detail.html"
 
-class LocationCreateView(PermissionRequiredMixin, CreateView):
+class LocationCreateView(CreateView):
     model = Location
     fields = ['name', 'zipcode', 'city', 'country', 'address']
     template_name = "locations/location_form.html"
-    permission_required = 'location.add_location'
+    #permission_required = 'location.add_location'
 
-class LocationUpdateView(PermissionRequiredMixin, UpdateView):
+class LocationUpdateView(UpdateView):
     model = Location
     # Not recommended (potential security issue if more fields added)
     fields = ['name', 'zipcode', 'city', 'country', 'address']
     template_name = "locations/location_form.html"
-    permission_required = 'location.change_location'
+    #permission_required = 'location.change_location'
 
 
-class LocationDeleteView(PermissionRequiredMixin, DeleteView):
+class LocationDeleteView(DeleteView):
     model = Location
     success_url = reverse_lazy('locations')
     template_name = "locations/location_confirm_delete.html"
-    permission_required = 'location.delete_location'
+    #permission_required = 'location.delete_location'
 
     def form_valid(self, form):
         try:
             self.object.delete()
-            return HttpResponseRedirect(self.success_url)
+            return render(self.success_url)
         except Exception as e:
-            return HttpResponseRedirect(
+            return render(
                 reverse("location-delete", kwargs={"pk": self.object.pk})
             )
+        
+
+class MapListView(ListView):
+    model = Map
+    template_name = "pages/maps.html"
+
+class MapDetailView(DetailView):
+    model = Map
+    map_locations = Map.objects.all()
+    template_name = "maps/map_detail.html"
+
+class MapCreateView(CreateView):
+    model = Map
+    fields = ['name', 'creator', 'zoom_level', 'locations', 'date']
+    template_name = "maps/map_form.html"
+    #permission_required = 'map.add_map'
+
+class MapUpdateView(UpdateView):
+    model = Map
+    # Not recommended (potential security issue if more fields added)
+    fields = ['name', 'creator', 'zoom_level', 'locations', 'date']
+    template_name = "maps/map_form.html"
     
+class MapDeleteView(DeleteView):
+    model = Map
+    success_url = reverse_lazy('maps')
+    template_name = "maps/map_confirm_delete.html"
+   # permission_required = 'map.delete_map'
+
+    def form_valid(self):
+        try:
+            self.object.delete()
+            return render(self.success_url)
+        except Exception as e:
+            return render(
+                reverse("map-delete", kwargs={"pk": self.object.pk}))
     

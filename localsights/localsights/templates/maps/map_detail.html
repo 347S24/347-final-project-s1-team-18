@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}localsights{% endblock title %}
+
+{% block css %}
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Your stuff: Third-party CSS libraries go here -->
+    <!-- This file stores project-specific CSS -->
+
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+    <!-- Your specific CSS file for the maps page -->
+    <link href="{% static 'css/maps.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="pageholder">
+    <div class="titleholder"> 
+        
+        <div class="title"> Your Map's Locations! </div> 
+        
+    </div>
+
+    <div class="linkholder">
+            <table id="ourtable3" class="myTable m-3">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Zipcode</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Geocode link</th>
+                       
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for location in map.locations.all %}
+                    <tr>
+                        <td> {{location.id}} </td>
+                        <td> {{location.name}} </td>
+                        <td> {{location.address}} </td>
+                        <td> {{location.zipcode}} </td>
+                        <td> {{location.city}} </td>
+                        <td> {{location.country}} </td>
+                        <td> <a href="{% url 'geocoding' location.id %}"> Geocode!</a> </td>
+                       
+                    </tr>
+
+                    {% endfor%}
+                </tbody>
+
+                
+            </table>
+        
+     </div>
+
+     <div class="linkholder"> <a href="{% url 'distance' %}"> Calculate Distance </a> </div>
+
+     <div class="linkholder">  
+        <a href="{% url 'display_map' %}"> Go to the map! </a> 
+
+    </div>
+</div>
+
+
+{% endblock %}
