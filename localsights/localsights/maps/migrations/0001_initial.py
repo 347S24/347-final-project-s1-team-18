@@ -34,7 +34,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(default='SOME STRING', help_text='Enter a name for your Map', max_length=200)),
                 ('creator', models.CharField(default='SOME STRING', help_text='Enter your name', max_length=200)),
-                ('date', models.DateField()),
                 ('zoom_level', models.FloatField()),
                 ('locations', models.ManyToManyField(related_name='locations', to='maps.Location')),
             ],
