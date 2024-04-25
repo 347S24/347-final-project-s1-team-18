@@ -1,6 +1,8 @@
+import decimal
 from tokenize import String
 from ninja import NinjaAPI, Schema
-from localsights.users.models import User #, Maps, Locations
+from localsights.users.models import User
+from localsights.maps.models import Map, Location
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 from typing import List
@@ -15,10 +17,6 @@ class UserOut(Schema):
     username: str
     email: str
 
-class LocationOut(Schema):
-    id: int
-    name: str
-
 class LocationIn(Schema):
     name: str
     address: str
@@ -27,16 +25,38 @@ class LocationIn(Schema):
     country: str
     zipcode: int
 
+class LocationOut(Schema):
+    id: int
+    name: str 
+    # address: str
+    # city: str
+    # state: str
+    # country: str
+    # zipcode: str
+    latitude: float
+    longitude: float
+
+class LocationId(Schema):
+    id: int
+
 class MapIn(Schema):
     name: str
     area: LocationIn
     locations: List[LocationIn]
 
-class MapOut(Schema):
-    id: int
-    name: str
-    # add more latter
+# class MapOut(Schema):
 
+
+class MapId(Schema):
+    id: int
+
+class Coordinate(Schema):
+    lat: float
+    lng: float
+
+class CoordinateRange(Schema): 
+    point1: Coordinate
+    point2: Coordinate
 
 # Searching
 
@@ -65,10 +85,10 @@ def search_users_by_email(request, string: str):
 # For when map and location models are implemnted
 
 # # Map Searches
-# @api.get("/search/maps/name/{string}", response=List[MapOut])
-# def search_maps_by_name(request, string: str):
-#     maps = Map.objects.filter(mame__icontains=string).all().order_by('name')[:10:1]
-#     return maps
+@api.get("/search/maps/name/{string}", response=List[MapId])
+def search_maps_by_name(request, string: str):
+    maps = Map.objects.filter(name__icontains=string).all().order_by('name')[:10:1]
+    return maps
 
 # @api.get("/search/maps/", response=List[MapOut])
 # def search_maps_by_area(request, payload: LocationIn):
@@ -77,10 +97,32 @@ def search_users_by_email(request, string: str):
 
 
 # # Location searches
-# @api.get("/search/locations/name/{string}", response=List[MapOut])
-# def search_locations_by_name(request, string: str):
-#     maps = Location.objects.filter(mame__icontains=string).all().order_by('name')[:10:1]
-#     return maps
+@api.get("/search/locations/name/{string}", response=List[LocationId])
+def search_locations_by_name(request, string: str):
+    location = Location.objects.filter(name__icontains=string).all().order_by('name')[:10:1]
+    return location
+
+@api.get("/search/locations/range", response=List[LocationId])
+def search_locations_by_range(request, payload: CoordinateRange):
+    # data = {**payload.dict()}
+    # # print(data)
+    location = Location.objects.filter(
+        latitude__gt=payload.point1.lat, 
+        latitude__lt=payload.point2.lat, 
+        longitude__gt=payload.point1.lng, 
+        longitude__lt=payload.point2.lng
+    ).all()
+    return location
+
+# def search_locations_by_range(lat1, lat2, lng1, lng2) {
+#     maps = Location.objects.filter(
+#         lat__gt=lat1, 
+#         lat__lt=lat2, 
+#         lng__gt=lng1, 
+#         lng__lt=lng2
+#     ).all()[:10:1]
+#     return map
+# }
 
 # @api.get("/search/locations/", response=List[MapOut])
 # def search_locations_by_location(request, payload: LocationIn):
@@ -99,14 +141,14 @@ def get_user(request, id ):
 # # gets map by id
 # @api.get("/map/{id}", response=MapOut)
 # def get_map(request, id ):
-#     maps = get_object_or_404(Map, id = id)
-#     return maps
+#     map = get_object_or_404(Map, id = id)
+#     return map
 
 # # gets location by id
-# @api.get("/location/{id}", response=LocationOut)
-# def get_location(request, id ):
-#     locations = get_object_or_404(Location, id = id)
-#     return locations
+@api.get("/location/{id}", response=LocationOut)
+def get_location(request, id ):
+    location = get_object_or_404(Location, id = id)
+    return location
 
 
 # Creating
