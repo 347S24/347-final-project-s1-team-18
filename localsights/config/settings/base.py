@@ -5,6 +5,7 @@ Base settings to build other settings files upon.
 from pathlib import Path
 
 import environ
+import os
 
 # localsights/
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -18,7 +19,7 @@ if Path(ENV_FILE).exists():
     env.read_env(str(ENV_FILE))
 
 
-GOOGLE_API_KEY = 'AIzaSyA_S5faDYt2MX-2wVTuKAchwPsmgqyuArA'
+GOOGLE_API_KEY = 'AIzaSyC_IZC0MaPortOd20cLmrDNn9rKYGeKJ_0'
 
 # GENERAL
 # ------------------------------------------------------------------------------

@@ -5,6 +5,7 @@
 
 #map{
     height: 100%;
+    overflow:visible;
 }
 
 #ourtable3_wrapper{

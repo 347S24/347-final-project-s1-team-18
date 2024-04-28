@@ -17,54 +17,97 @@
 
 {% block content %}
 
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+<script>
+
+    let map
+
+    async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    
+
+        var locations = JSON.parse('{{locations|safe}}')
+       // console.log(myList)
+
+        const map = new Map(document.getElementById("map"), {
+            center: { lat: 38.4496, lng: -78.8689 },
+            zoom: 8,
+            mapId: "8433f60590734a15",
+        });
+        
+       // console.log(typeof locations)
+       // console.log(locations)
+       // console.log(typeof locations[0].lat)
+       // console.log(locations[0].lat)
+       // console.log(locations[1])
+       // console.log(locations[2])
+
+        
+        locations.forEach(function (location) {
+            console.log(location)
+            console.log(location.lat)
+            console.log(location.lng)
+
+            const marker = new AdvancedMarkerElement({
+            position: { lat: location.lat, lng: location.lng },
+            map: map,
+            title: location.name,
+          }); 
+        })
+        }
+    
+
+    initMap();
+</script>
+
 <div class="pageholder">
     <div class="titleholder"> 
-        
         <div class="title"> Your Map's Locations! </div> 
-        
     </div>
 
     <div class="linkholder">
-            <table id="ourtable3" class="myTable m-3">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Zipcode</th>
-                        <th>City</th>
-                        <th>Country</th>
-                        <th>Geocode link</th>
-                       
-                    </tr>
-                </thead>
+      <table id="ourtable3" class="myTable m-3">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Zipcode</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Geocode link</th>
+            </tr>
+        </thead>
 
-                <tbody>
-                    {% for location in map.locations.all %}
-                    <tr>
-                        <td> {{location.id}} </td>
-                        <td> {{location.name}} </td>
-                        <td> {{location.address}} </td>
-                        <td> {{location.zipcode}} </td>
-                        <td> {{location.city}} </td>
-                        <td> {{location.country}} </td>
-                        <td> <a href="{% url 'geocoding' location.id %}"> Geocode!</a> </td>
-                       
-                    </tr>
+        <tbody>
+            {% for location in map.locations.all %}
+            <tr>
+                <td> {{location.id}} </td>
+                <td> {{location.name}} </td>
+                <td> {{location.address}} </td>
+                <td> {{location.zipcode}} </td>
+                <td> {{location.city}} </td>
+                <td> {{location.country}} </td>
+                <td> <a href="{% url 'geocoding' location.id %}"> Geocode!</a> </td>
+            </tr>
+            {% endfor%}
+        </tbody>        
+      </table>
+    </div>
+    
+    <div class="linkholder">
+        <div class="mapholder" style="width: 100%; height: 300px;">
+            <div id="map"></div>
 
-                    {% endfor%}
-                </tbody>
+            <script async
+                src="https://maps.googleapis.com/maps/api/js?key={{key}}&loading=async&callback=initMap">
+            </script>
 
-                
-            </table>
-        
-     </div>
+            
 
-     <div class="linkholder"> <a href="{% url 'distance' %}"> Calculate Distance </a> </div>
-
-     <div class="linkholder">  
-        <a href="{% url 'display_map' %}"> Go to the map! </a> 
-
+        </div>
     </div>
 </div>
 

@@ -15,6 +15,7 @@ class Location(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+
     lat = models.CharField(max_length=200, blank=True, null=True)
     lng = models.CharField(max_length=200, blank=True, null=True)
     place_id = models.CharField(max_length=200, blank=True, null=True)

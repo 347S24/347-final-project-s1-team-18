@@ -1,3 +1,4 @@
+import json
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
@@ -39,12 +40,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 #         }
 
 #         return render(request, self.template_name, context)
-    
-class MapView(ListView):
-    template_name = "pages/maps.html"
-    context_object_name = 'mydata'
-    model = Location
-    success_url = "/"
 
 
 class HomeView(ListView):
@@ -183,6 +178,25 @@ class LocationDetailView(DetailView):
     model = Location
     template_name = "locations/location_detail.html"
 
+    def get(self, request, pk):
+        location = Location.objects.get(pk=pk)
+    
+        # Once we have the address use it to get latitude and longitude from the API 
+        if (location.address and location.country and location.zipcode and location.city != None) and (location.lat == None and location.lng == None): 
+            print("here in detail view")
+            address_string = str(location.address)+", "+str(location.zipcode)+", "+str(location.city)+", "+str(location.country)
+            key = getattr(settings, 'GOOGLE_API_KEY', None)
+            gmaps = googlemaps.Client(key)
+            result = gmaps.geocode(address_string)[0]
+            
+            location.lat = result.get('geometry', {}).get('location', {}).get('lat', None)
+            location.lng = result.get('geometry', {}).get('location', {}).get('lng', None)
+
+        context = {
+            "location": location
+        }
+        return render(request, self.template_name, context)
+
 class LocationCreateView(CreateView):
     model = Location
     fields = ['name', 'zipcode', 'city', 'country', 'address']
@@ -219,8 +233,58 @@ class MapListView(ListView):
 
 class MapDetailView(DetailView):
     model = Map
-    map_locations = Map.objects.all()
+
     template_name = "maps/map_detail.html"
+    apikey = getattr(settings, 'GOOGLE_API_KEY', None)
+
+    def get(self, request, pk): 
+        map = Map.objects.get(pk=pk)
+        map_locations = map.locations.all()
+        locations = []        
+        address_string = ""
+        apikey = getattr(settings, 'GOOGLE_API_KEY', None)
+        print("map_locations: ", map_locations)
+        
+
+        for location in map_locations:
+            if (location.address and location.country and location.zipcode and location.city != None) and (location.lat == None and location.lng == None): 
+                address_string = str(location.address)+", "+str(location.zipcode)+", "+str(location.city)+", "+str(location.country)
+                print()
+                print("apicall")
+                print()
+                key = getattr(settings, 'GOOGLE_API_KEY', None)
+                gmaps = googlemaps.Client(key)
+                result = gmaps.geocode(address_string)[0]
+            
+                location.lat = result.get('geometry', {}).get('location', {}).get('lat', None)
+                location.lng = result.get('geometry', {}).get('location', {}).get('lng', None)
+
+            print(location.name)
+            print(location.zipcode)
+            print(location.city)
+            print(location.country)
+            print(location.address)
+            print(location.lat)
+            print(location.lng)
+
+            data = {
+                'lat': float(location.lat),
+                'lng': float(location.lng),
+                'name': location.name
+            }
+            locations.append(data)
+
+        locations = json.dumps(locations)
+
+        context = {
+            "map": map,
+            "locations": locations,
+            'address': address_string,
+            "key": MapDetailView.apikey
+        }
+
+        return render(request, self.template_name, context)
+        
 
 class MapCreateView(CreateView):
     model = Map
