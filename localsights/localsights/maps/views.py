@@ -10,6 +10,8 @@ from datetime import datetime
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
+import requests
+from .models import __eq__
 
 # class MapView(View): 
 #     template_name = "pages/maps.html"
@@ -182,7 +184,7 @@ class LocationDetailView(DetailView):
         location = Location.objects.get(pk=pk)
     
         # Once we have the address use it to get latitude and longitude from the API 
-        if (location.address and location.country and location.zipcode and location.city != None) and (location.lat == None and location.lng == None): 
+        if (location.address and location.country and location.zipcode and location.city != None) and (location.lat == None or location.lng == None or location.place_id == None): 
             print("here in detail view")
             address_string = str(location.address)+", "+str(location.zipcode)+", "+str(location.city)+", "+str(location.country)
             key = getattr(settings, 'GOOGLE_API_KEY', None)
@@ -191,7 +193,9 @@ class LocationDetailView(DetailView):
             
             location.lat = result.get('geometry', {}).get('location', {}).get('lat', None)
             location.lng = result.get('geometry', {}).get('location', {}).get('lng', None)
+            location.place_id = result.get('place_id', {})
 
+        location.save()
         context = {
             "location": location
         }
@@ -237,36 +241,44 @@ class MapDetailView(DetailView):
     template_name = "maps/map_detail.html"
     apikey = getattr(settings, 'GOOGLE_API_KEY', None)
 
+    def buildPath(self, request, pk):
+
+        # grab specific map
+        map = Map.objects.get(pk=pk)
+
+        origin = f'{map.starting_location.lat},{map.dest_location.lng}'
+        print(origin)
+        
     def get(self, request, pk): 
+        # Get the map and its locations
         map = Map.objects.get(pk=pk)
         map_locations = map.locations.all()
+
+        # Generate the starting point, waypoints and destination parrameters for API call
+        origin = f'{map.starting_location.lat},{map.starting_location.lng}'
+        dest = f'{map.dest_location.lat},{map.dest_location.lng}'
+        way_points = []
+        for location in map_locations:
+            # check to make sure this isn't the starting or end point
+            print("In for loop")
+            if location != map.starting_location and location != map.dest_location:
+                print("Location name: ", location.name)
+                way_points.append(f'{location.lat},{location.lng}')
+
+        print("origin: ", origin)
+        print()
+        print("way_points: ", way_points)
+        print()
+        print("dest: ", dest)
+
+
         locations = []        
         address_string = ""
         apikey = getattr(settings, 'GOOGLE_API_KEY', None)
         print("map_locations: ", map_locations)
         
-
-        for location in map_locations:
-            if (location.address and location.country and location.zipcode and location.city != None) and (location.lat == None and location.lng == None): 
-                address_string = str(location.address)+", "+str(location.zipcode)+", "+str(location.city)+", "+str(location.country)
-                print()
-                print("apicall")
-                print()
-                key = getattr(settings, 'GOOGLE_API_KEY', None)
-                gmaps = googlemaps.Client(key)
-                result = gmaps.geocode(address_string)[0]
-            
-                location.lat = result.get('geometry', {}).get('location', {}).get('lat', None)
-                location.lng = result.get('geometry', {}).get('location', {}).get('lng', None)
-
-            print(location.name)
-            print(location.zipcode)
-            print(location.city)
-            print(location.country)
-            print(location.address)
-            print(location.lat)
-            print(location.lng)
-
+      #  buildPath(self, request, pk)
+        for location in map_locations:          
             data = {
                 'lat': float(location.lat),
                 'lng': float(location.lng),
@@ -274,11 +286,15 @@ class MapDetailView(DetailView):
             }
             locations.append(data)
 
-        locations = json.dumps(locations)
+        origin = json.dumps(origin)
+        way_points = json.dumps(way_points)
+        dest = json.dumps(dest)
 
         context = {
             "map": map,
-            "locations": locations,
+            "origin": origin,
+            "way_points": way_points,
+            "dest": dest,
             'address': address_string,
             "key": MapDetailView.apikey
         }
@@ -288,7 +304,7 @@ class MapDetailView(DetailView):
 
 class MapCreateView(CreateView):
     model = Map
-    fields = ['name', 'creator', 'zoom_level', 'locations', 'date']
+    fields = ['name', 'creator', 'zoom_level', 'starting_location', 'dest_location', 'locations', 'date']
     template_name = "maps/map_form.html"
     #permission_required = 'map.add_map'
 

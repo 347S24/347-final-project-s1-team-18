@@ -10,7 +10,6 @@ class Location(models.Model):
     name = models.CharField(max_length=500)
     address = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
-    state = models.CharField(max_length=200, blank=True, null=True)
     country = models.CharField(max_length=200, blank=True, null=True)
     zipcode = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -27,7 +26,14 @@ class Location(models.Model):
         """Returns the URL to access a detail record for this book."""
         return reverse('location-detail', args=[str(self.id)])
     
+    def __eq__(self, other): 
+        if isinstance(other, Location): 
+            if other.name == self.name and self.address == other.address and self.city == other.city and self.zipcode == other.zipcode: 
+                return True
+        return False
+    
 class Map(models.Model):
+
     name = models.CharField(
         max_length=200,
         unique=False,
@@ -42,6 +48,21 @@ class Map(models.Model):
         default=''
     )
 
+    starting_location = models.OneToOneField(
+        Location,
+        on_delete=models.CASCADE,
+        related_name='firstlocation',
+        default='',
+        null=True
+    )
+
+    dest_location = models.OneToOneField(
+        Location,
+        on_delete=models.CASCADE,
+        related_name='lastlocation',
+        default='',
+        null=True
+    )
 
     locations = models.ManyToManyField(
         'Location',
