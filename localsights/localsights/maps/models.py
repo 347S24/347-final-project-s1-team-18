@@ -8,6 +8,12 @@ import uuid # Required for unique location instances
 
 class Location(models.Model):
     name = models.CharField(max_length=500)
+    creator = models.CharField(
+        max_length=200,
+        unique=False,
+        help_text="",
+        default=''
+    )
     address = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
     country = models.CharField(max_length=200, blank=True, null=True)

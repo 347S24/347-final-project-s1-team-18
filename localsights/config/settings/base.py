@@ -19,7 +19,7 @@ if Path(ENV_FILE).exists():
     env.read_env(str(ENV_FILE))
 
 
-GOOGLE_API_KEY = os.environ.get['GOOGLE_API_KEY']
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 
 # GENERAL
 # ------------------------------------------------------------------------------

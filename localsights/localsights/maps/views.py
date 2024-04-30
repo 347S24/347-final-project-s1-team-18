@@ -13,37 +13,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 import requests
 from .models import __eq__
 
-# class MapView(View): 
-#     template_name = "pages/maps.html"
-
-#     def get(self,request): 
-#         key = getattr(settings, 'GOOGLE_API_KEY', None)
-        
-#         if not key:
-#             # Handle the case when the API key is not set in settings
-#             # You can raise an error, set a default key, or handle it as needed
-#             raise ValueError("GOOGLE_API_KEY is not set in settings")
-#         eligable_locations = Location.objects.filter(place_id__isnull=False)
-#         locations = []
-
-#         for a in eligable_locations: 
-#             data = {
-#                 'lat': float(a.lat), 
-#                   lng': float(a    lng), 
-#                 'name': a.name
-#             }
-
-#             locations.append(data)
-
-
-#         context = {
-#             "key":key, 
-#             "locations": locations
-#         }
-
-#         return render(request, self.template_name, context)
-
-
 class HomeView(ListView):
     template_name = "pages/home.html"
     context_object_name = 'mydata'
@@ -175,6 +144,11 @@ class DisplayMapView(View):
 class LocationListView(ListView):
     model = Location
     template_name = "pages/locations.html"
+    
+    def get_queryset(self):
+        return (
+            Location.objects.filter(creator=self.request.user)
+        )
 
 class LocationDetailView(DetailView):
     model = Location
@@ -182,7 +156,8 @@ class LocationDetailView(DetailView):
 
     def get(self, request, pk):
         location = Location.objects.get(pk=pk)
-    
+        
+        
         # Once we have the address use it to get latitude and longitude from the API 
         if (location.address and location.country and location.zipcode and location.city != None) and (location.lat == None or location.lng == None or location.place_id == None): 
             print("here in detail view")
@@ -194,6 +169,7 @@ class LocationDetailView(DetailView):
             location.lat = result.get('geometry', {}).get('location', {}).get('lat', None)
             location.lng = result.get('geometry', {}).get('location', {}).get('lng', None)
             location.place_id = result.get('place_id', {})
+        location.creator = str(self.request.user)
 
         location.save()
         context = {
