@@ -1,49 +1,156 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <a href="{% url 'location-create' %}">
-    <button type="button" id="createMap" class="btn btn-success">Create Location +</button>
-  </a>
+<style>
+    body {
+        background: linear-gradient(to bottom, #000000, #ffffff);
+        color: #fff;
+        margin: 0;
+        font-family: 'Consolas', serif;
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
 
-  <br></br>
-  <h1>Location List</h1>
+    .container {
+        padding: 4.5vw;
+        text-align: left;
+    }
+
+    h1 {
+        top: 1vw;
+        left: 10%;
+        font-size: 4vw;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .button {
+        background: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        transform: skew(-21deg);
+        margin-top: 20px; /* Add margin for spacing */
+    }
+
+    .span {
+        display: inline-block;
+        transform: skew(21deg);
+    }
+
+    .button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+        left: 0;
+        background: rgb(20, 20, 20);
+        opacity: 0;
+        z-index: -1;
+        transition: all 0.5s;
+    }
+
+    .button:hover {
+        color: #fff;
+    }
+
+    .button:hover::before {
+        left: 0;
+        right: 0;
+        opacity: 1;
+    }
+
+    .location-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px; /* Add margin for spacing */
+        left: 5%;
+    }
+
+    .location-table th, .location-table td {
+        padding: 1vw;
+        border-bottom: 1px solid #fff;
+        text-align: left;
+    }
+
+    .location-table th {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .location-table tbody tr:nth-child(even) {
+        background-color: #555555;
+    }
+
+    .location-buttons a {
+        margin-right: 10px; /* Add margin between buttons */
+    }
+
+    .location-buttons a.btn-primary,
+    .location-buttons a.btn-danger {
+        background: transparent;
+        color: #fff;
+        border: 1px solid #fff;
+        padding: 5px 10px;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 3px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
   
-    <table class="table">
+    .location-buttons a.btn-danger:hover {
+        background-color: #f77a7a;
+        color: #fafafa;
+    }
 
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Zipcode</th>
-        <th scope="col">City</th>
-        <th scope="col">Country</th>
-        <th scope="col">Address</th>
-        <th scope="col">Operation</th>
-      </tr>
+    .location-buttons a.btn-primary:hover{
+        background-color: #6e82f5;
+        color: #fafafa;
+    }
 
-      {% if location_list %}
-      <tbody>
-        {% for location in location_list %}
+</style>
+
+<div class="container">
+    <h1>Location List</h1>
+
+    <table class="location-table">
         <tr>
-          <th scope="row"><a href="{{ location.get_absolute_url }}">{{ location.name }}</a></th>
-          <th>{{ location.zipcode }}</th>
-          <th>{{ location.city }}</th>
-          <th>{{ location.country }}</th>
-          <th>{{ location.address }}</th>
-          <th>
-            <a href="{% url 'location-update' location.id %}">
-              <button type="button" class="btn btn-primary">Update</button>
-            </a>
-
-            <a href="{% url 'location-delete' location.id %}">
-              <button type="button" class="btn btn-danger">Delete</button>
-            </a>
-          </th>
+            <th>Name</th>
+            <th>Zipcode</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Address</th>
+            <th>Operation</th>
         </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    </table>
-    <p>There are no locations yet.</p>
-  {% endif %}
 
+        {% if location_list %}
+        <tbody>
+            {% for location in location_list %}
+            <tr>
+                <td>{{ location.name }}</a></td>
+                <td>{{ location.zipcode }}</td>
+                <td>{{ location.city }}</td>
+                <td>{{ location.country }}</td>
+                <td>{{ location.address }}</td>
+                <td class="location-buttons">
+                    <a href="{% url 'location-update' location.id %}" class="btn btn-primary">Update</a>
+                    <a href="{% url 'location-delete' location.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        {% else %}
+        </table>
+        <p>There are no locations yet.</p>
+        {% endif %}
+        <a href="{% url 'location-create' %}">
+          <button type="button" class="button">Create Location +</button>
+      </a>
+</div>
 {% endblock %}
