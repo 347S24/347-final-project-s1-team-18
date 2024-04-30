@@ -235,25 +235,25 @@ class MapListView(ListView):
     model = Map
     template_name = "pages/maps.html"
 
+    def get_queryset(self):
+        return (
+            Map.objects.filter(creator=self.request.user)
+        )
+
 class MapDetailView(DetailView):
     model = Map
 
     template_name = "maps/map_detail.html"
     apikey = getattr(settings, 'GOOGLE_API_KEY', None)
-
-    def buildPath(self, request, pk):
-
-        # grab specific map
-        map = Map.objects.get(pk=pk)
-
-        origin = f'{map.starting_location.lat},{map.dest_location.lng}'
-        print(origin)
         
     def get(self, request, pk): 
         # Get the map and its locations
         map = Map.objects.get(pk=pk)
         map_locations = map.locations.all()
 
+        map.creator = str(self.request.user)
+        map.save()
+        
         # Generate the starting point, waypoints and destination parrameters for API call
         origin = f'{map.starting_location.lat},{map.starting_location.lng}'
         dest = f'{map.dest_location.lat},{map.dest_location.lng}'
@@ -304,9 +304,9 @@ class MapDetailView(DetailView):
 
 class MapCreateView(CreateView):
     model = Map
-    fields = ['name', 'creator', 'zoom_level', 'starting_location', 'dest_location', 'locations', 'date']
+    fields = ['name', 'zoom_level', 'starting_location', 'dest_location', 'locations', 'date']
     template_name = "maps/map_form.html"
-    #permission_required = 'map.add_map'
+
 
 class MapUpdateView(UpdateView):
     model = Map

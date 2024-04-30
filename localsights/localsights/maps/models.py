@@ -48,21 +48,8 @@ class Map(models.Model):
         default=''
     )
 
-    starting_location = models.OneToOneField(
-        Location,
-        on_delete=models.CASCADE,
-        related_name='firstlocation',
-        default='',
-        null=True
-    )
-
-    dest_location = models.OneToOneField(
-        Location,
-        on_delete=models.CASCADE,
-        related_name='lastlocation',
-        default='',
-        null=True
-    )
+    starting_location = models.ForeignKey(Location, on_delete=models.CASCADE, default='', null=True, related_name='firstlocation')
+    dest_location = models.ForeignKey(Location, on_delete=models.CASCADE, default='', null=True, related_name='lastlocation')
 
     locations = models.ManyToManyField(
         'Location',
