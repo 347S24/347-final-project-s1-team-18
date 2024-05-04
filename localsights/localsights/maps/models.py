@@ -38,6 +38,9 @@ class Location(models.Model):
                 return True
         return False
     
+    def __hash__(self):
+        return super().__hash__()
+    
 class Map(models.Model):
 
     name = models.CharField(

@@ -15,6 +15,9 @@
         text-align: left;
     }
 
+    .location-link {
+        color: white;
+    }
     h1 {
         top: 1vw;
         left: 10%;
@@ -132,7 +135,7 @@
         <tbody>
             {% for location in location_list %}
             <tr>
-                <td>{{ location.name }}</a></td>
+                <th scope="row"><a class="location-link" href="{{ location.get_absolute_url }}">{{ location.name }}</a></th>
                 <td>{{ location.zipcode }}</td>
                 <td>{{ location.city }}</td>
                 <td>{{ location.country }}</td>
