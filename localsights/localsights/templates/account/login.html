@@ -8,41 +8,111 @@
 
 {% block inner %}
 
-<h1>{% trans "Sign In" %}</h1>
+<style>
+  /* Add your custom styles here to match the theme */
 
-{% get_providers as socialaccount_providers %}
+  body {
+    background: linear-gradient(to bottom, #000000, #ffffff);
+    color: #fff;
+    margin: 0;
+    font-family: 'Consolas', serif;
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+  }
 
-{% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+  .container {
+    padding: 4vw;
+    text-align: left;
+  }
 
-<div class="socialaccount_ballot">
+  h1 {
+    font-size: 4vw;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
+  .button {
+    background: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transform: skew(-21deg);
+    margin-top: 20px;
+    /* Add margin for spacing */
+  }
 
-  <div class="login-or">{% trans 'or' %}</div>
+  .button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 100%;
+    left: 0;
+    background: rgb(20, 20, 20);
+    opacity: 0;
+    z-index: -1;
+    transition: all 0.5s;
+  }
+
+  .button:hover::before {
+    left: 0;
+    right: 0;
+    opacity: 1;
+  }
+
+  .login-form {
+    margin-top: 20px;
+  }
+
+  .login-form input[type="text"],
+  .login-form input[type="password"] {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .login-form .secondaryAction {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+
+  .login-form .primaryAction {
+    background-color: #6e82f5;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .login-form .primaryAction:hover {
+    background-color: #4854a5;
+  }
+</style>
+
+<div class="container">
+  <h1>{% trans "Sign In" %}</h1>
+
+  <form class="login-form" method="POST" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+    <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+  </form>
 
 </div>
 
-{% include "socialaccount/snippets/login_extra.html" %}
-
-{% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-{% endif %}
-
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
-</form>
-
 {% endblock %}
-

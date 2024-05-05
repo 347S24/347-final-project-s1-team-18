@@ -4,16 +4,15 @@
 {% block title %}localsights{% endblock title %}
 
 {% block css %}
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- Your stuff: Third-party CSS libraries go here -->
-    <!-- This file stores project-specific CSS -->
-
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    <!-- Your specific CSS file for the maps page -->
     <link href="{% static 'css/maps.css' %}" rel="stylesheet">
 {% endblock %}
+
+<style>
+    
+</style>
+
+
 
 {% block content %}
 
@@ -104,12 +103,13 @@
     window.initMap = initMap
 </script>
 
+
 <div class="pageholder">
     <div class="titleholder"> 
-        <div class="title"> Your Map's Locations! </div> 
+        <div class="title"> Your Map's Details! </div> 
     </div>
 
-    <div class="linkholder">
+    <!-- <div class="linkholder">
       <table id="ourtable3" class="myTable m-3">
         <thead>
             <tr>
@@ -137,7 +137,7 @@
             {% endfor%}
         </tbody>        
       </table>
-    </div>
+    </div> -->
     
     <div class="linkholder">
         <div class="mapholder" style="width: 100%; height: 300px;">
