@@ -6,17 +6,30 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+"""
 ALLOWED_HOSTS = env.list(
     "DJANGO_ALLOWED_HOSTS", default=["everycheese.com"]
-)
+) """
+ALLOWED_HOSTS = ['164.92.85.56', 'localhost']
 
 # DATABASES
 # ------------------------------------------------------------------------------
+"""
 DATABASES["default"] = env.db("DATABASE_URL")  # noqa: F405
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
 DATABASES["default"]["CONN_MAX_AGE"] = env.int(  # noqa: F405
     "CONN_MAX_AGE", default=60
-)
+)"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'localsights',
+        'USER': 'redmanba',
+        'PASSWORD': 'localsights123',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # CACHES
 # ------------------------------------------------------------------------------
