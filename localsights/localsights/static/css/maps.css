@@ -7,7 +7,6 @@
 #map{
     height: 35vw;
     overflow:visible;
-    border: #e3e2e2;
 }
 
 #ourtable3_wrapper{
@@ -133,8 +132,6 @@ form{
     text-align: center;
     align-items: center;
     border-radius: 5px;
-    margin-top: 20px;
-    margin-bottom: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, .15);
 
 
@@ -142,8 +139,36 @@ form{
 
 body {
     background: linear-gradient(to bottom, #002466, #ffffff);
+    background-size: cover;
     color: #fff;
+    padding: 0;
     margin: 0;
     font-family: 'Consolas', serif;
     overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Add button from map_details */
+.button-holder {
+    margin-top: 17vw;
+    left: 10%;
+    text-align: center; /* Center the button horizontally */
+    /* move botton to left */
+
+
+}
+
+.button-holder button {
+    height: 40px;
+    width: 150px;
+    border-radius: 5px;
+    background-color: #007bff; /* Blue color for the button */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.button-holder button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }

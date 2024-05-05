@@ -11,7 +11,7 @@
     }
 
     .container {
-        padding: 4.5vw;
+        padding: 2vw;
         text-align: left;
     }
 
@@ -128,14 +128,14 @@
             <th>City</th>
             <th>Country</th>
             <th>Address</th>
-            <th>Operation</th>
+            <th> </th>
         </tr>
 
         {% if location_list %}
         <tbody>
             {% for location in location_list %}
             <tr>
-                <th scope="row"><a class="location-link" href="{{ location.get_absolute_url }}">{{ location.name }}</a></th>
+                <th>{{ location.name }}</th>
                 <td>{{ location.zipcode }}</td>
                 <td>{{ location.city }}</td>
                 <td>{{ location.country }}</td>

@@ -11,7 +11,8 @@
     }
 
     .container {
-        padding: 4.5vw;
+        padding-bottom: 20vw;
+        padding: 2vw;
         text-align: left;
     }
 
@@ -70,15 +71,17 @@
         left: 5%;
     }
 
-    .location-table th, .location-table td {
+    .location-table th{
         padding: 1vw;
         border-bottom: 1px solid #fff;
         text-align: left;
+        background-color: #002466;
     }
 
-    .location-table th {
-        background-color: #002466;
-        color: #fff;
+    .location-table td {
+        padding: 1vw;
+        border-bottom: 1px solid #fff;
+        text-align: left;
     }
 
     .location-table tbody tr:nth-child(even) {
@@ -101,6 +104,7 @@
         border-radius: 3px;
         transition: background-color 0.3s ease, color 0.3s ease;
     }
+
 
   
     .location-buttons a.btn-danger:hover {
@@ -125,7 +129,7 @@
             <th>Creator</th>
             <th>Zoom Level</th>
             <th>Date</th>
-            <th>Operation</th>
+            <th>  </th>
         </tr>
 
         {% if map_list %}

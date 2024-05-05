@@ -113,9 +113,15 @@
 
     <h1>LocalSights</h1>
     <p class="lead">Discover Local Gems, Effortlessly Explored</p>
+    {% if request.user.is_authenticated %}
     <a href="{% url 'locations' %}">
         <button class="button"><span>start</span></button>
     </a>
+    {% else %}
+    <a href="{% url 'account_signup' %}">
+        <button class="button"><span>Sign Up</span></button>
+    </a>
+    {% endif %}
     <p class="description">With LocalSights, you can easily add your favorite <br>locations, create maps, and optimize
         routes. <br>Simply sign up, add your locations, and
         let us handle the rest!</p>

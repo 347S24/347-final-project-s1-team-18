@@ -7,6 +7,64 @@
 {% block head_title %}{% trans "Account" %}{% endblock %}
 
 {% block inner %}
+
+<style>
+  body {
+      background: linear-gradient(to bottom, #002466, #ffffff);
+      color: white;
+      padding: 1vw;
+      margin: 0;
+      font-family: 'Consolas', serif;
+  }
+
+  h1, h2 {
+      font-size: 3vw;
+      font-weight: bold;
+      margin-bottom: 20px;
+  }
+
+  p {
+      font-size: 1.5vw;
+      margin-bottom: 10px;
+  }
+
+  .radio {
+      margin-bottom: 10px;
+  }
+
+  .verified, .unverified, .primary {
+      font-size: 1vw;
+      margin-left: 10px;
+  }
+
+  .form-group {
+      margin-top: 20px;
+  }
+
+  .secondaryAction {
+      margin-right: 10px;
+  }
+
+  .primaryAction {
+      margin-right: 10px;
+  }
+
+  .btn-primary {
+      background-color: #6e82f5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 5px;
+  }
+
+  .btn-primary:hover {
+      background-color: #4854a5;
+  }
+</style>
 <h1>{% trans "E-mail Addresses" %}</h1>
 
 {% if user.emailaddress_set.all %}

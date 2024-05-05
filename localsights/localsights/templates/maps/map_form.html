@@ -1,16 +1,83 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="sidebar">
+<style>
+    body {
+        background: linear-gradient(to bottom, #002466, #ffffff);
+        color: white;
+        padding: 0;
+        margin: 0;
+        font-family: 'Consolas', serif;
+    }
+
+    .container {
+        padding-bottom: 20vw;
+        padding: 2vw;
+        text-align: left;
+    }
 
 
+    h1 {
+        font-size: 3vw;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    form {
+    
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .button {
+        background: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        transform: skew(-21deg);
+        margin-top: 20px; /* Add margin for spacing */
+        position: relative;
+        z-index: 1;
+    }
+
+    .button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+        left: 0;
+        background: #002466;
+        opacity: 0;
+        z-index: -1;
+        transition: all 0.5s;
+    }
+
+    .button:hover {
+        color: #fff;
+    }
+
+    .button:hover::before {
+        left: 0;
+        right: 0;
+        opacity: 1;
+    }
+
+</style>
+
+<div class="container">
+    <div class="sidebar">
+        <!-- Sidebar content here -->
+    </div>
+    <h1>Create your map!</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button" id="mapDetails">Submit</button>
+    </form>
 </div>
-<h1>Create your map here!</h1>
-<br></br>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-secondary" id="mapDetails">Submit</button>
-</form>
-
 {% endblock %}
+

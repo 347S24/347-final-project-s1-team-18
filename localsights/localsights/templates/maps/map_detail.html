@@ -147,10 +147,30 @@
                 src="https://maps.googleapis.com/maps/api/js?key={{key}}&loading=async&callback=initMap">
             </script>
 
+        
             
 
         </div>
+
+
     </div>
+
+    <div class="button-holder">
+        <button onclick="openGoogleMaps()"><span>Get Directions</span></button>
+    </div>
+
+    <script>
+        function openGoogleMaps() {
+            const origin = encodeURIComponent('{{origin|safe}}');
+            const destination = encodeURIComponent('{{dest|safe}}');
+            const waypoints = encodeURIComponent('{{way_points|safe}}');
+
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}`;
+            window.open(url, '_blank');
+        }
+    </script>
+
+    
 </div>
 
 

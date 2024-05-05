@@ -12,16 +12,15 @@
   /* Add your custom styles here to match the theme */
 
   body {
-    background: linear-gradient(to bottom, #000000, #ffffff);
+    background: linear-gradient(to bottom,  #002466, #ffffff);
     color: #fff;
     margin: 0;
     font-family: 'Consolas', serif;
-    overflow-x: hidden;
-    /* Prevent horizontal scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
   }
 
   .container {
-    padding: 4vw;
+    padding: 2vw;
     text-align: left;
   }
 
@@ -40,8 +39,7 @@
     text-transform: uppercase;
     cursor: pointer;
     transform: skew(-21deg);
-    margin-top: 20px;
-    /* Add margin for spacing */
+    margin-top: 20px; /* Add margin for spacing */
   }
 
   .button::before {
@@ -51,7 +49,7 @@
     bottom: 0;
     right: 100%;
     left: 0;
-    background: rgb(20, 20, 20);
+    background: #002466;
     opacity: 0;
     z-index: -1;
     transition: all 0.5s;
@@ -71,20 +69,19 @@
   .login-form input[type="password"] {
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid #fff;
-    color: #fff;
+    color: white;
     padding: 10px;
     margin-bottom: 10px;
   }
 
   .login-form .secondaryAction {
-    color: #fff;
     text-decoration: none;
     margin-right: 10px;
   }
 
   .login-form .primaryAction {
-    background-color: #6e82f5;
-    color: #fff;
+    background-color: white;
+    color: black;
     border: none;
     padding: 10px 20px;
     font-size: 15px;
@@ -92,11 +89,11 @@
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 3px;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   .login-form .primaryAction:hover {
-    background-color: #4854a5;
+    color: white;
+    background-color: white;
   }
 </style>
 
@@ -106,11 +103,13 @@
   <form class="login-form" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
     {{ form|crispy }}
-    {% if redirect_field_value %}
+    <!-- {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-    {% endif %}
+    {% endif %} -->
     <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-    <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+    <a href="{% url 'home'  %}">
+      <button class="button primaryAction btn btn-primary" type="submit">Sign In</button>
+    </a>
   </form>
 
 </div>
