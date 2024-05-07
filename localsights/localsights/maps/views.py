@@ -280,8 +280,14 @@ class MapDetailView(DetailView):
 
 class MapCreateView(CreateView):
     model = Map
-    fields = ['name', 'zoom_level', 'starting_location', 'dest_location', 'locations', 'date']
+    #fields = ['name', 'starting_location', 'dest_location', 'locations']
     template_name = "maps/map_form.html"
+
+    def get(self, request):
+        context = {
+            "loc_list": Location.objects.filter(creator=self.request.user),
+        }
+        return render(request, self.template_name, context)
 
 
 class MapUpdateView(UpdateView):

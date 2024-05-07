@@ -1,4 +1,5 @@
 import decimal
+from lib2to3.fixes.fix_methodattrs import MAP
 from tokenize import String
 from ninja import NinjaAPI, Schema
 from localsights.users.models import User
@@ -6,6 +7,7 @@ from localsights.maps.models import Map, Location
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 from typing import List
+from datetime import date
 
 
 # something
@@ -30,24 +32,31 @@ class LocationIn(Schema):
 class LocationOut(Schema):
     id: int
     name: str 
-    # address: str
-    # city: str
+    address: str
+    city: str
     # state: str
-    # country: str
-    # zipcode: str
-    latitude: float
-    longitude: float
+    country: str
+    zipcode: str
+    # latitude: float
+    # longitude: float
 
 class LocationId(Schema):
     id: int
 
 class MapIn(Schema):
     name: str
-    area: LocationIn
-    locations: List[LocationIn]
+    starting_location: int
+    dest_location: int
+    locations: List[int]
 
-# class MapOut(Schema):
-
+class MapOut(Schema):
+    id: int
+    name: str
+    creator: str
+    zoom_level: int
+    starting_location: LocationId
+    dest_location: LocationId
+    locations: List[LocationId]
 
 class MapId(Schema):
     id: int
@@ -156,9 +165,22 @@ def get_location(request, id ):
 # Creating
 
 # # Create new map
-# @api.post("/map")
-# def create_map(request, payload: MapIn):
-#     return {"id": map.id}
+@api.post("/map", response=MapOut)
+def create_map(request, payload: MapIn):
+    print(request.user)
+    print("====================================")
+    map = Map.objects.create(
+        name = payload.name,
+        zoom_level = 1,
+        starting_location = get_object_or_404(Location, id = payload.starting_location),
+        dest_location = get_object_or_404(Location, id = payload.dest_location),
+        date = date.today(),
+        creator = str(request.user)
+    )
+    for i in payload.locations:
+        map.locations.add(i)
+
+    return map
 
 # @api.post("/location")
 # def create_location(request, payload: LocationIn):
